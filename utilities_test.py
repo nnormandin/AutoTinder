@@ -1,24 +1,33 @@
-# import required modules
-import os, pynder, time
-
-# get pynder with 'pip install pynder'
+# get matches
+# report n-matches, recently active
+# show stale matches
+# number who have messaged
+# number who haven't responded to last
+# delete stale
+# show/download pics
+# sort by near you and active recently
+# change location
+# launch messages based on when active and distance
+# (joke about ghosts default, maybe gif) -- include name?
+# make profile discoverable by function
+# function to initialize
 
 # move to home directory, open token and fbid
-os.chdir('/home/nick/')
-token = open('token.txt').read().strip()
-fbid = open('fbid.txt').read().strip()
+
 
 # begin session with id and token
-session = pynder.Session(fbid, token)
-print("Hello " + session.profile.name + ", tinderbot session initiated")
+#session = pynder.Session(fbid, token)
+#print("Hello " + session.profile.name + ", tinderbot session initiated")
 
-# make sure you're currently discoverable
-if not session.profile.discoverable:
-	session.update_profile({"discoverable": True})
-	print("You have been made discoverable")
+# function to start session
+def create_session(facebookID, token):
+	if token is None:
+		print("No token supplied. Use get_token() function to retrieve one")
+	return pynder.Session(facebookID, token)
+
 
 # function to adjust radius
-def adjust_radius(radius = 5):
+def adjust_radius(session, radius = 5):
 	cr = session.profile.distance_filter
 	if cr == radius:
 		print("**radius is already " + str(cr))
@@ -29,9 +38,10 @@ def adjust_radius(radius = 5):
 
 
 # like any user within the radius that doesn't have mutual friends
-def like_friendless(sleeptime=3, limit=1000):
+def like_friendless(session, sleeptime=3, limit=1000):
 	try:
-		nearby = session.nearby_users(limit = 10)
+		limit = min(limit, 10)
+		nearby = session.nearby_users(limit = limit)
 		maxlikes = min(limit, len(nearby))
 		print("**found " + str(len(nearby)) + " users")
 		print("**analyzing " + str(maxlikes) + " users")
@@ -48,17 +58,38 @@ def like_friendless(sleeptime=3, limit=1000):
 			user.like()
 			time.sleep(sleeptime)
 
+
 # make yourself undiscoverable
-def go_invisible():
+def go_invisible(session):
 	if session.profile.discoverable:
 		session.update_profile({"discoverable": False})
 	print("You are now invisible")
 
 
+# make sure you're currently discoverable
+def go_visible(session):
+	if not session.profile.discoverable:
+		session.update_profile({"discoverable": True})
+		print("You have been made discoverable")
+	else:
+		print("You are already discoverable")
+
+
 # example steps
 if __name__ == "__main__":
-	#adjust_radius(20)
+
+	# move to project directory
+	os.chdir('/home/nick/python/projects/AutoTinder/')
+
+	# load facebook ID and auth token
+	token = open('token.txt').read().strip()
+	fbid = open('fbid.txt').read().strip()
+
+	# create session
+	session = create_session(fbid, token)
+	adjust_radius(session, radius = 20)
 	#for i in range(0, 50): like_friendless()
 	#time.sleep(5)
-	adjust_radius(5)
-	go_invisible()
+	adjust_radius(session, radius = 5)
+	go_invisible(session)
+
