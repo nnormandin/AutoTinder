@@ -10,24 +10,24 @@
 # launch messages based on when active and distance
 # (joke about ghosts default, maybe gif) -- include name?
 # make profile discoverable by function
-# function to initialize
 
-# move to home directory, open token and fbid
-
-
-# begin session with id and token
-#session = pynder.Session(fbid, token)
-#print("Hello " + session.profile.name + ", tinderbot session initiated")
 
 # function to start session
 def create_session(facebookID, token):
 	if token is None:
 		print("No token supplied. Use get_token() function to retrieve one")
-	return pynder.Session(facebookID, token)
+	
+	session = pynder.Session(facebookID, token)
+	user = session.profile.name
+	print("Hello {0}, AutoTinder session initiated".format(user))
+	return(session)
+
 
 
 # function to adjust radius
 def adjust_radius(session, radius = 5):
+	if not _is_session(session):
+		raise
 	cr = session.profile.distance_filter
 	if cr == radius:
 		print("**radius is already " + str(cr))
@@ -74,6 +74,12 @@ def go_visible(session):
 	else:
 		print("You are already discoverable")
 
+def _is_session(x):
+	if type(x) not "Session:":
+		print("Please use a valid Session object")
+		return(False)
+	else:
+		return(True)
 
 # example steps
 if __name__ == "__main__":
