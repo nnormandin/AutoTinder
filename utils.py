@@ -13,7 +13,7 @@
 # show photos of recent matches
 
 
-import pynder, os
+import pynder, os, time
 
 # function to start session - locates fbid and token if in cwd
 def create_session(facebookID, token):
@@ -71,25 +71,27 @@ def adjust_radius(session, radius = 5):
 
 
 # like any user within the radius that doesn't have mutual friends
-def like_friendless(session, sleeptime=3, limit=1000):
-	try:
-		limit = min(limit, 10)
-		nearby = session.nearby_users(limit = limit)
-		maxlikes = min(limit, len(nearby))
-		print("**found " + str(len(nearby)) + " users")
-		print("**analyzing " + str(maxlikes) + " users")
-	except:
-		print("Error- probably no users in radius")
-		return
-	for user in nearby:
-		if len(user.common_connections) > 0:
-			user.dislike()
-			print(user.name + " had a mutual friend")
-			time.sleep(sleeptime)
-		else:
-			print("you liked " + user.name)
-			user.like()
-			time.sleep(sleeptime)
+def like_nearby(session, no_mutuals = True, sleeptime=3, limit=1000, repeats = 1):
+	for i in range(1, repeats):
+		try:
+			limit = min(limit, 10)
+			nearby = session.nearby_users(limit = limit)
+			maxlikes = min(limit, len(nearby))
+			print("**found " + str(len(nearby)) + " users")
+			print("**analyzing " + str(maxlikes) + " users")
+		except:
+			print("Error- probably no users in radius")
+			return
+		for user in nearby:
+			if len(user.common_connections) > 0 and no_mutuals:
+				user.dislike()
+				print(user.name + " had a mutual friend")
+				time.sleep(sleeptime)
+			else:
+				print("you liked " + user.name)
+				user.like()
+				time.sleep(sleeptime)
+		time.sleep(sleeptime)
 
 
 # make yourself undiscoverable
