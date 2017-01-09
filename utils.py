@@ -96,16 +96,18 @@ def like_friendless(session, sleeptime=3, limit=1000):
 def go_invisible(session):
 	if session.profile.discoverable:
 		session.update_profile({"discoverable": False})
-	print("You are now invisible")
+		print("** you are now invisible")
+	else:
+		print("** you are already invisible")
 
 
 # make sure you're currently discoverable
 def go_visible(session):
 	if not session.profile.discoverable:
 		session.update_profile({"discoverable": True})
-		print("You have been made discoverable")
+		print("** you have been made discoverable")
 	else:
-		print("You are already discoverable")
+		print("** you are already discoverable")
 
 # def _is_session(x):
 # 	if type(x) not "Session":
