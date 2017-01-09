@@ -1,5 +1,6 @@
 # get matches
 # report n-matches, recently active
+# match visualization - graph of when recently active
 # show stale matches
 # number who have messaged
 # number who haven't responded to last
@@ -9,18 +10,50 @@
 # change location
 # launch messages based on when active and distance
 # (joke about ghosts default, maybe gif) -- include name?
-# make profile discoverable by function
+# show photos of recent matches
 
 
-# function to start session
+import pynder, os
+
+# function to start session - locates fbid and token if in cwd
 def create_session(facebookID, token):
+
+	# see if token is supplied
 	if token is None:
-		print("No token supplied. Use get_token() function to retrieve one")
+
+		# check if it's in the working directory
+		print('** searching current working directory for token')
+		dirfiles = os.listdir()
+
+		# open and read if found
+		if 'token.txt' in dirfiles and 'fbid.txt' in dirfiles:
+			facebookID = open('fbid.txt').read()
+			token = open('token.txt').read()
+
+		# suggest get_token() function
+		print("** no token supplied. Use get_token() function to retrieve one")
 	
 	session = pynder.Session(facebookID, token)
 	user = session.profile.name
-	print("Hello {0}, AutoTinder session initiated".format(user))
+	print("** hello {0}, AutoTinder session initiated".format(user))
 	return(session)
+
+# function to retrieve matches
+def get_matches(session, since = None, num_attempts = 3):
+	matches = []
+	for i in range(1, num_attempts):
+		if not matches:
+			try:
+				matches = session.matches(since = since)
+			except:
+				print('** attempt number {0} failed.'.format(i))
+				print('** attempting {0} more times'.format(num_attempts - i))
+		else:
+			print('** located {0} matches'.format(len(matches)))
+			return matches
+	if not matches:
+		print('** could not retrieve matches')
+		return
 
 
 
@@ -74,12 +107,12 @@ def go_visible(session):
 	else:
 		print("You are already discoverable")
 
-def _is_session(x):
-	if type(x) not "Session:":
-		print("Please use a valid Session object")
-		return(False)
-	else:
-		return(True)
+# def _is_session(x):
+# 	if type(x) not "Session":
+# 		print("Please use a valid Session object")
+# 		return(False)
+# 	else:
+# 		return(True)
 
 # example steps
 if __name__ == "__main__":
