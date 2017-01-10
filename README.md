@@ -1,6 +1,6 @@
 ## AutoTinder
 
-AutoTinder is a python submodule used to put Tinder on autopilot. It extends the [pynder](https://github.com/charliewolf/pynder) library of Tinder API calls written in python. The result is a set of convenience functions accessed via `pynder.autoTinder` that allows you to easily automate and improve your experience.
+AutoTinder is a python submodule used to put Tinder on autopilot. It extends the [pynder](https://github.com/charliewolf/pynder) library of Tinder API calls written in python. The result is a set of convenience functions that allows you to easily automate and improve your experience.
 
 
 

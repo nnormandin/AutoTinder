@@ -15,11 +15,20 @@
 
 import pynder, os, time
 
-# function to start session - locates fbid and token if in cwd
-def create_session(facebookID, token):
+# function to create session and generate token if needed
+def create_session(facebookID, token, dir = None):
 
-	# see if token is supplied
-	if token is None:
+	# see if a directory for the fbid and token is supplied
+	if dir:
+		print('** searching directory for token and fbid')
+		wd0 = os.getcwd()
+		os.chdir(dir)
+		facebookID = open('fbid.txt').read()
+		token = open('token.txt').read()
+		os.chdir(wd0)
+
+	# see if token is given
+	if token is None is dir is None:
 
 		# check if it's in the working directory
 		print('** searching current working directory for token')
@@ -29,9 +38,9 @@ def create_session(facebookID, token):
 		if 'token.txt' in dirfiles and 'fbid.txt' in dirfiles:
 			facebookID = open('fbid.txt').read()
 			token = open('token.txt').read()
-
-		# suggest get_token() function
-		print("** no token supplied. Use get_token() function to retrieve one")
+		else:
+			# suggest get_token() function
+			print("** no token supplied. Use get_token() function to retrieve one")
 	
 	session = pynder.Session(facebookID, token)
 	user = session.profile.name
