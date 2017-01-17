@@ -16,7 +16,7 @@
 import pynder, os
 
 # function to start session - locates fbid and token if in cwd
-def create_session(token, dir = None):
+def create_session(token = None, dir = None):
 
 	# see if a directory for the fbid and token is supplied
 	if dir:
@@ -36,8 +36,9 @@ def create_session(token, dir = None):
 		if 'token.txt' in dirfiles:
 			token = open('token.txt').read()
 
-		# suggest get_token() function
-		print("** no token supplied. Use get_token() function to retrieve one")
+		else:
+			# suggest get_token() function
+			print("** no token supplied. Use get_token() function to retrieve one")
 	
 	session = pynder.Session(token)
 	user = session.profile.name
@@ -66,7 +67,6 @@ def get_matches(session, since = None, num_attempts = 3, summarize = False):
 # summarize matches
 #def match_summary(matches):
 	
-
 
 
 # function to adjust radius
