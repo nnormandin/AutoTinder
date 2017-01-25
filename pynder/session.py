@@ -1,8 +1,8 @@
 import re
 import robobrowser
+import os
 from time import time
 from cached_property import cached_property
-
 import pynder.api as api
 from pynder.errors import InitializationError
 from pynder.models import Profile, Hopeful, Match, Friend
