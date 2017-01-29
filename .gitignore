@@ -1,3 +1,5 @@
 *.txt
 *.pyc
 *.sublime-workspace
+*.obj
+

@@ -46,7 +46,7 @@ def create_session(token = None, dir = None):
 	return(session)
 
 # function to retrieve matches
-def get_matches(session, since = None, num_attempts = 3, summarize = False):
+def get_matches(session, since = None, num_attempts = 3, summary = True):
 	matches = []
 	for i in range(1, num_attempts):
 		if not matches:
@@ -57,7 +57,7 @@ def get_matches(session, since = None, num_attempts = 3, summarize = False):
 				print('** attempting {0} more times'.format(num_attempts - i))
 		else:
 			print('** located {0} matches'.format(len(matches)))
-			if summarize:
+			if summary:
 				match_summary(matches)
 			return matches
 	if not matches:
@@ -65,8 +65,24 @@ def get_matches(session, since = None, num_attempts = 3, summarize = False):
 		return
 
 # summarize matches
-#def match_summary(matches):
+def match_summary(session, matches, days = 5):
 	
+	print('\n** you have matched with {0} users'.format(len(matches)))
+
+	since = datetime.today()-timedelta(days = days)
+
+	# metrics
+	my_id = session.profile.id
+	messaged_users = [x for x in matches if x.messages]
+	print('** you have talked to {0} of those users'.format(len(messaged_users)))
+
+	you_last = sum(1 for x in messaged_users if x.messages[-1].to.id == my_id)
+	them_last = len(messaged_users) - you_last
+	print('** {0} of them have not responded to your last message'.format(you_last))
+	print('** {0} of them messaged you last'.format(them_last))
+
+	recent = [x for x in matches if datetime.strptime(x.user.ping_time[:10], '%Y-%m-%d') > since]
+	print('** {0} of your matches have been online in the past {1} days'.format(len(recent), days))
 
 
 # function to adjust radius
@@ -75,15 +91,15 @@ def adjust_radius(session, radius = 5):
 	# 	raise
 	cr = session.profile.distance_filter
 	if cr == radius:
-		print("**radius is already " + str(cr))
+		print("** radius is already " + str(cr))
 	else:
-		print("**current radius is " + str(session.profile.distance_filter))
+		print("** current radius is " + str(session.profile.distance_filter))
 		session.update_profile({"distance_filter": radius})
-		print("**radius adjusted to " + str(radius))
+		print("** radius adjusted to " + str(radius))
 
 
 # like any user within the radius that doesn't have mutual friends
-def like_nearby(session, no_mutuals = True, sleeptime=3, limit=1000, repeats = 1):
+def like_nearby(session, no_mutuals = True, sleeptime = 3, limit = 1000, repeats = 1):
 	for i in range(1, repeats):
 		try:
 			limit = min(limit, 10)
@@ -104,6 +120,7 @@ def like_nearby(session, no_mutuals = True, sleeptime=3, limit=1000, repeats = 1
 				user.like()
 				time.sleep(sleeptime)
 		time.sleep(sleeptime)
+
 
 
 # make yourself undiscoverable
