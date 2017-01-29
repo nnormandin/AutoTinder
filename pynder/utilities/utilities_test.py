@@ -122,6 +122,25 @@ def like_nearby(session, no_mutuals = True, sleeptime = 3, limit = 1000, repeats
 		time.sleep(sleeptime)
 
 
+# send message to users who meet radius / time criteria
+def broadcast(matches, radius = 10, hours = 24, message = None):
+	matches = [x for x in matches if not x.messages]
+	since = datetime.today()-timedelta(hours = hours)
+
+	for m in matches:
+		if m.user.distance_km < radius:
+			last = datetime.strptime(m.user.ping_time[:10], '%Y-%m-%d')
+			if last > since:
+				print('**{0} is {1}km away'.format(m.user.name, m.user.distance_km))
+				msg = 'hey {0}!'.format(m.user.name)
+				m.message(msg)
+				time.sleep(2)
+				m.message('do you want to hear a joke about ghosts?')
+				time.sleep(2)
+
+
+
+
 
 # make yourself undiscoverable
 def go_invisible(session):
