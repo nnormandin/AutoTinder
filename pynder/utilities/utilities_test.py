@@ -97,7 +97,6 @@ def adjust_radius(session, radius = 5):
 def like_nearby(session, no_mutuals = True, sleeptime = 3, limit = 1000, repeats = 1):
 	print('**searching nearby')
 	for i in range(0, repeats):
-		limit = min(limit, 10)
 		nearby = session.nearby_users(limit = limit)
 		maxlikes = min(limit, len(nearby))
 		print("**found " + str(len(nearby)) + " users")
