@@ -1,19 +1,14 @@
-# get matches
-# report n-matches, recently active
 # match visualization - graph of when recently active
 # show stale matches
-# number who have messaged
-# number who haven't responded to last
 # delete stale
 # show/download pics
 # sort by near you and active recently
-# change location
-# launch messages based on when active and distance
-# (joke about ghosts default, maybe gif) -- include name?
 # show photos of recent matches
 
 
-import pynder, os
+import pynder, os, time
+from geopy.geocoders import Nominatim
+
 
 # function to start session - locates fbid and token if in cwd
 def create_session(token = None, dir = None):
@@ -39,7 +34,7 @@ def create_session(token = None, dir = None):
 		else:
 			# suggest get_token() function
 			print("** no token supplied. Use get_token() function to retrieve one")
-	
+
 	session = pynder.Session(token)
 	user = session.profile.name
 	print("** hello {0}, AutoTinder session initiated".format(user))
@@ -66,7 +61,7 @@ def get_matches(session, since = None, num_attempts = 3, summary = True):
 
 # summarize matches
 def match_summary(session, matches, days = 5):
-	
+
 	print('\n** you have matched with {0} users'.format(len(matches)))
 
 	since = datetime.today()-timedelta(days = days)
@@ -100,16 +95,13 @@ def adjust_radius(session, radius = 5):
 
 # like any user within the radius that doesn't have mutual friends
 def like_nearby(session, no_mutuals = True, sleeptime = 3, limit = 1000, repeats = 1):
-	for i in range(1, repeats):
-		try:
-			limit = min(limit, 10)
-			nearby = session.nearby_users(limit = limit)
-			maxlikes = min(limit, len(nearby))
-			print("**found " + str(len(nearby)) + " users")
-			print("**analyzing " + str(maxlikes) + " users")
-		except:
-			print("Error- probably no users in radius")
-			return
+	print('**searching nearby')
+	for i in range(0, repeats):
+		limit = min(limit, 10)
+		nearby = session.nearby_users(limit = limit)
+		maxlikes = min(limit, len(nearby))
+		print("**found " + str(len(nearby)) + " users")
+		print("**analyzing " + str(maxlikes) + " users")
 		for user in nearby:
 			if len(user.common_connections) > 0 and no_mutuals:
 				user.dislike()
@@ -139,7 +131,13 @@ def broadcast(matches, radius = 10, hours = 24, message = None):
 				time.sleep(2)
 
 
-
+# change location
+def change_location(session, location_name):
+	geolocator = Nominatim()
+	location = geolocator.geocode(location_name)
+	print('** changing location to {0}'.format(location.address))
+	session.update_location(location.latitude, location.longitude)
+	print('** location changed')
 
 
 # make yourself undiscoverable
