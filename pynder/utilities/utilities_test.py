@@ -53,7 +53,7 @@ def get_matches(session, since = None, num_attempts = 3, summary = True):
 		else:
 			print('** located {0} matches'.format(len(matches)))
 			if summary:
-				match_summary(matches)
+				match_summary(session, matches)
 			return matches
 	if not matches:
 		print('** could not retrieve matches')
