@@ -10,18 +10,17 @@ Tinder is great, but you shouldn't waste all day swiping when you can have someo
 
 * Initialize a Tinder session from the comfort of your computer
 * Generate an authorization token if necessary
+* Change location based on location name/address via geocoding
 * Make yourself discoverable / undiscoverable
 * Adjust your radius
-* Change location (soon to be based on text search for location names)
 * Like users around you (exclude those with mutual friends, if desired)
+* Generate a summary of your matches and message history
+* Send messages to some of your matches based on last time online and current distance
 
 In addition to all of this great stuff, all of the functions and classes originally included in `pynder` remain intact. You can check them out [here](http://bit.ly/2iAVQg1).
 
 ## What's next?
 
-* Perform analysis of interactions with your matches
-* Query matches by last time online and current distance from you
-* Launch messages to recent matches based on user-defined criteria
 * Send alerts with new matches and conversations
 * Facial detection and scoring methods
 * Delete stale / old conversations automatically
