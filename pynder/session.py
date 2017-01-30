@@ -29,11 +29,11 @@ class Session(object):
         while True:
             response = self._api.recs(limit)
             users = response['results'] if 'results' in response else []
-            for user in users:
-                if not user["_id"].startswith("tinder_rate_limited_id_"):
-                    yield Hopeful(user, self)
-            if not len(users):
-                break
+            ret = []
+            for u in users:
+                if not u["_id"].startswith("tinder_rate_limited_id_"):
+                    ret.append(Hopeful(u,self))
+            return ret
 
     def update_profile(self, profile):
         return self._api.update_profile(profile)
