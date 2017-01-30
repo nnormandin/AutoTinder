@@ -15,7 +15,7 @@ Tinder is great, but you shouldn't waste all day swiping when you can have someo
 * Adjust your radius
 * Like users around you (exclude those with mutual friends, if desired)
 * Generate a summary of your matches and message history
-* Send messages to some of your matches based on last time online and current distance
+* Send personalized messages to some of your matches based on last time online and current distance
 
 In addition to all of this great stuff, all of the functions and classes originally included in `pynder` remain intact. You can check them out [here](http://bit.ly/2iAVQg1).
 
