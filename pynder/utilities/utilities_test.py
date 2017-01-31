@@ -81,10 +81,10 @@ def match_summary(session, matches, days = 5):
 
 	you_last = sum(1 for x in messaged_users if x.messages[-1].to.id == my_id)
 	them_last = len(messaged_users) - you_last
-	print('** {0} of them have not responded to your last message'.format(you_last))
-	print('** {0} of them messaged you last'.format(them_last))
+	print('** {0} of them have not responded to your last message'.format(them_last))
+	print('** {0} of them messaged you last'.format(you_last))
 
-	recent = [x for x in matches if datetime.strptime(x.user.ping_time[:10], '%Y-%m-%d') > since]
+	recent = [x for x in matches if datetime.strptime(x.user.ping_time[:16], '%Y-%m-%dT%H:%M') > since]
 	print('** {0} of your matches have been online in the past {1} days'.format(len(recent), days))
 
 
