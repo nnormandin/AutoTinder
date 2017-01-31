@@ -16,6 +16,7 @@ Tinder is great, but you shouldn't waste all day swiping when you can have someo
 * Like users around you (exclude those with mutual friends, if desired)
 * Generate a summary of your matches and message history
 * Send personalized messages to some of your matches based on last time online and current distance
+* Loop through and respond to all recent unanswered messages
 
 In addition to all of this great stuff, all of the functions and classes originally included in `pynder` remain intact. You can check them out [here](http://bit.ly/2iAVQg1).
 
@@ -51,10 +52,11 @@ pynder.broadcast(matches, radius = 10, hours = 2, message = 'hi')
 
 # make your profile invisible
 pynder.go_invisible(s)
+
 ```
 
 ## What's next?
 
 * Send alerts with new matches and conversations
-* Facial detection and scoring methods
+* Facial detection methods
 * Delete stale / old conversations automatically
