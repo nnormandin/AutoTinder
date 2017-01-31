@@ -7,6 +7,8 @@
 
 
 import pynder, os, time
+from datetime import datetime
+from datetime import timedelta
 from geopy.geocoders import Nominatim
 
 
@@ -102,7 +104,7 @@ def like_nearby(session, no_mutuals = True, sleeptime = 3, limit = 1000, repeats
 		print("**found " + str(len(nearby)) + " users")
 		print("**analyzing " + str(maxlikes) + " users")
 		for user in nearby:
-			if len(user.common_connections) > 0 and no_mutuals:
+			if user.common_connections and no_mutuals:
 				user.dislike()
 				print(user.name + " had a mutual friend")
 				time.sleep(sleeptime)
@@ -120,7 +122,7 @@ def broadcast(matches, radius = 10, hours = 24, message = None):
 
 	for m in matches:
 		if m.user.distance_km < radius:
-			last = datetime.strptime(m.user.ping_time[:10], '%Y-%m-%d')
+			last = datetime.strptime(m.user.ping_time[:16], '%Y-%m-%dT%H:%M')
 			if last > since:
 				print('**{0} is {1}km away'.format(m.user.name, m.user.distance_km))
 				msg = 'hey {0}!'.format(m.user.name)
@@ -154,12 +156,29 @@ def go_visible(session):
 	else:
 		print("You are already discoverable")
 
-# def _is_session(x):
-# 	if type(x) not "Session":
-# 		print("Please use a valid Session object")
-# 		return(False)
-# 	else:
-# 		return(True)
+def respond_recent(session, matches, show_last = 4):
+	conversations = [x for x in matches if x.messages]
+	my_id = session.profile.id
+
+	for c in conversations:
+		if c.messages[-1].to.id == my_id:
+			print("Conversation with {0}:".format(c.user.name))
+			print_messages(c.messages, show_last, my_id)
+
+
+def print_messages(messages, show_last, my_id):
+	l = []
+	i = min(show_last, len(messages))
+	while i > 0:
+		if messages[-i].to.id == my_id:
+			print('THEM:\n{0}\n'.format(messages[-i].body))
+			i -= 1
+		else:
+			print('ME:\n{0}\n'.format(messages[-i].body))
+			i -= 1
+
+
+
 
 # example steps
 if __name__ == "__main__":
