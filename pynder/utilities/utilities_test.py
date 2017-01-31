@@ -1,3 +1,9 @@
+# add to respond_recent
+	# read bio
+	# preconfigured responses
+	# age / distance
+	# open pic in browser?
+
 # match visualization - graph of when recently active
 # show stale matches
 # delete stale
@@ -183,26 +189,3 @@ def print_messages(messages, show_last, my_id):
 		else:
 			print(' ' * 5 + 'ME:\n{0}\n'.format(messages[-i].body))
 			i -= 1
-
-
-
-
-# example steps
-if __name__ == "__main__":
-
-	# move to project directory
-	os.chdir('/home/nick/python/projects/AutoTinder/')
-
-	# load facebook ID and auth token
-	token = open('token.txt').read().strip()
-	fbid = open('fbid.txt').read().strip()
-
-	# create session
-	session = create_session(fbid, token)
-	adjust_radius(session, radius = 20)
-	#for i in range(0, 50): like_friendless()
-	#time.sleep(5)
-	adjust_radius(session, radius = 5)
-	go_invisible(session)
-
-as
