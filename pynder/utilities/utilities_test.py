@@ -162,19 +162,26 @@ def respond_recent(session, matches, show_last = 4):
 
 	for c in conversations:
 		if c.messages[-1].to.id == my_id:
-			print("Conversation with {0}:".format(c.user.name))
+			print("\n** CONVERSATION WITH {0}:**\n".format(c.user.name))
 			print_messages(c.messages, show_last, my_id)
+			print('\n** RESPONSE? TYPE n TO BYPASS **\n')
+			response = input()
+			if response == 'n':
+				os.system('clear')
+				continue
+			else:
+				c.message(response)
+				os.system('clear')
 
 
 def print_messages(messages, show_last, my_id):
-	l = []
 	i = min(show_last, len(messages))
 	while i > 0:
 		if messages[-i].to.id == my_id:
-			print('THEM:\n{0}\n'.format(messages[-i].body))
+			print(' ' * 5 + 'THEM:\n{0}\n'.format(messages[-i].body))
 			i -= 1
 		else:
-			print('ME:\n{0}\n'.format(messages[-i].body))
+			print(' ' * 5 + 'ME:\n{0}\n'.format(messages[-i].body))
 			i -= 1
 
 
@@ -198,3 +205,4 @@ if __name__ == "__main__":
 	adjust_radius(session, radius = 5)
 	go_invisible(session)
 
+as
