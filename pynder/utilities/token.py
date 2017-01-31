@@ -1,4 +1,5 @@
 # from github.com/philipperemy/Deep-Learning-Tinder/blob/master/tinder_token.py
+import robobrowser
 
 def get_token(email, password):
     s = robobrowser.RoboBrowser(user_agent=MOBILE_USER_AGENT, parser="lxml")
