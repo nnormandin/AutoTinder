@@ -124,7 +124,7 @@ def like_nearby(session, no_mutuals = True, sleeptime = 3, limit = 1000, repeats
 # send message to users who meet radius / time criteria
 def broadcast(matches, radius = 10, hours = 24, message = None):
 	matches = [x for x in matches if not x.messages]
-	since = datetime.today()-timedelta(hours = hours)
+	since = datetime.now()-timedelta(hours = hours)
 
 	for m in matches:
 		if m.user.distance_km < radius:
@@ -136,6 +136,20 @@ def broadcast(matches, radius = 10, hours = 24, message = None):
 				time.sleep(2)
 				m.message('do you want to hear a joke about ghosts?')
 				time.sleep(2)
+
+
+# convert ping_time to datetime object
+def convert_date(ping_time):
+	td = timedelta(hours = 5)
+	date = datetime.strptime(ping_time[:16], '%Y-%m-%dT%H:%M') - td
+	return(date)
+
+
+# time difference
+def last_online(ping_time):
+	now = datetime.now()
+	then = convert_date(ping_time)
+	return(now - then)
 
 
 # change location
