@@ -12,7 +12,7 @@
 # show photos of recent matches
 
 
-import pynder, os, time
+import pynder, os, time, random
 from datetime import datetime
 from datetime import timedelta
 from geopy.geocoders import Nominatim
@@ -131,11 +131,15 @@ def broadcast(matches, radius = 10, hours = 24, message = None):
 			last = datetime.strptime(m.user.ping_time[:16], '%Y-%m-%dT%H:%M')
 			if last > since:
 				print('**{0} is {1}km away'.format(m.user.name, m.user.distance_km))
-				msg = 'hey {0}!'.format(m.user.name)
-				m.message(msg)
-				time.sleep(2)
-				m.message('do you want to hear a joke about ghosts?')
-				time.sleep(2)
+				if message:
+					m.message(message)
+					time.sleep(random.uniform(2.5, 4.5))
+				else:
+					msg = 'hey {0}!'.format(m.user.name)
+					m.message(msg)
+					time.sleep(random.uniform(2.5, 4.5))
+					m.message('how are you doing?')
+					time.sleep(random.uniform(2.5, 4.5))
 
 
 # convert ping_time to datetime object
@@ -178,6 +182,7 @@ def go_visible(session):
 
 def respond_recent(session, matches, show_last = 4):
 	conversations = [x for x in matches if x.messages]
+	conversations = conversations.sort(key = lambda x: x.messages[-1].sent)
 	my_id = session.profile.id
 
 	for c in conversations:
